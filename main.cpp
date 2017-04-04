@@ -1,5 +1,5 @@
 //Tetera que se mueve por MT14002
-//llave
+
 #include <GL/gl.h>
 #include <GL/glut.h>
 
@@ -31,7 +31,7 @@ void display(void)
     glScalef(scale, scale, scale);
 
     /* transformación modelo/vista */
-    gluLookAt(0.0,0.0,0.002, //punto de vista en el eje X,Y,Z
+    gluLookAt(0.0,0.0,0.0001, //punto de vista en el eje X,Y,Z
               0.0,0.0,0.0, //Centro del Objeto en el eje X,Y,Z
               0.0,1.0,0.0); //Orientación de la cámara (vector UP el eje X,Y,Z)
 
