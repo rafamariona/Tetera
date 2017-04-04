@@ -1,5 +1,6 @@
 //Tetera que se mueve por MT14002
 //asasas
+//con ssh
 #include <GL/gl.h>
 #include <GL/glut.h>
 
