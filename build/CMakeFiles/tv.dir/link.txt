@@ -1,0 +1,1 @@
+/usr/bin/c++       CMakeFiles/tv.dir/main.cpp.o  -o tv -rdynamic -lGLU -lGL -lSM -lICE -lX11 -lXext -lglut -lXmu -lXi 
