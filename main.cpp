@@ -35,7 +35,7 @@ void display(void)
     /* transformación modelo/vista */
     //acá la terera se visualiza en el 0,0,0
     gluLookAt(0.0,0.0,0.0001, //punto de vista en el eje X,Y,Z
-              0.0,-1.0,0.0, //Centro del Objeto en el eje X,Y,Z
+              0.0,-1.0,0.0, //Centro del Objeto en el eje X,Y,Z (vista de planta)
               0.0,1.0,0.0); //Orientación de la cámara (vector UP el eje X,Y,Z)
 
     /* Dibujamos una tetera */
