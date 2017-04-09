@@ -24,7 +24,7 @@ void display(void)
     /* seleccionamos la matriz modelo/vista */
     glMatrixMode(GL_MODELVIEW);
     /* color */
-    glColor3f(0.855, 0.647, 0.125);
+    glColor3f(0.0, 0.0, 1.0);
     glLoadIdentity();
     glTranslatef(X,Y,Z);
     glRotatef( rotate_x, 1.0, 0.0, 0.0 );
@@ -33,8 +33,9 @@ void display(void)
     glScalef(scale, scale, scale);
 
     /* transformación modelo/vista */
+    //acá la terera se visualiza en el 0,0,0
     gluLookAt(0.0,0.0,0.0001, //punto de vista en el eje X,Y,Z
-              0.0,0.0,0.0, //Centro del Objeto en el eje X,Y,Z
+              0.0,1.0,0.0, //Centro del Objeto en el eje X,Y,Z
               0.0,1.0,0.0); //Orientación de la cámara (vector UP el eje X,Y,Z)
 
     /* Dibujamos una tetera */
@@ -47,7 +48,7 @@ void display(void)
 // Función para controlar teclas normales del teclado.
 void keyboard(unsigned char key, int x, int y)
 {
-    //control de teclas que hacen referencia a Escalar y transladar el cubo en los ejes X,Y,Z.
+    //control de teclas que hacen referencia a Escalar y trasladar la tetera en los ejes X,Y,
     switch (key)
     {
     case 'Z':
@@ -68,7 +69,7 @@ void keyboard(unsigned char key, int x, int y)
     case 'Y' :
         Y += 0.05f;
         break;
-    case 'r':
+    case 'r': //resetea las posiciones de todo y el tamaño
         X=0.0,Y=0.0;
         rotate_x=0.0;
         rotate_y=0.0;
@@ -104,6 +105,22 @@ void specialKeys( int key, int x, int y )
 
 }
 
+void reshape(int w, int h)
+{
+    glViewport(0, 0,  (GLsizei) w, (GLsizei) h);
+// Activamos la matriz de proyeccion.
+    glMatrixMode(GL_PROJECTION);
+// "limpiamos" esta con la matriz identidad.
+    glLoadIdentity();
+// Usamos proyeccion ortogonal
+    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+// Activamos la matriz de modelado/visionado.
+    glMatrixMode(GL_MODELVIEW);
+// "Limpiamos" la matriz
+    glLoadIdentity();
+}
+
+
 int main(int argc, char** argv)
 {
 // Inicializa la librería auxiliar GLUT
@@ -124,8 +141,19 @@ int main(int argc, char** argv)
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(specialKeys);
 // Indica cual es la función para el cambio de tamaño de laventana
-    // glutReshapeFunc(reshape);
+    glutReshapeFunc(reshape);
+// Ubicamos la fuente de luz en el punto
+    GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+// Activamos la fuente de luz
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_NORMALIZE);
+
+
 // Comienza el bucle de dibujo y proceso de eventos.
+
+
     glutMainLoop();
 
 }
