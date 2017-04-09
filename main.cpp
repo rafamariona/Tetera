@@ -85,6 +85,27 @@ void keyboard(unsigned char key, int x, int y)
 }
 
 
+// Función para controlar teclas especiales
+void specialKeys( int key, int x, int y )
+{
+
+    //  Flecha derecha: aumentar rotación 5 grados
+    if (key == GLUT_KEY_RIGHT)
+        rotate_y += 5;
+//  Flecha izquierda: rotación en eje Y negativo 5 grados
+    else if (key == GLUT_KEY_LEFT)
+        rotate_y -= 5;
+    //  Flecha arriba: rotación en eje X positivo 5 grados
+    else if (key == GLUT_KEY_UP)
+        rotate_x += 5;
+    //  Flecha abajo: rotación en eje X negativo 5 grados
+    else if (key == GLUT_KEY_DOWN)
+        rotate_x -= 5;
+     
+    //  Solicitar actualización de visualización
+    glutPostRedisplay();
+
+}
 
 int main(int argc, char** argv)
 {
@@ -104,6 +125,7 @@ int main(int argc, char** argv)
 // Indica cual es la función de dibujo
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
+    glutSpecialFunc(specialKeys);
 // Indica cual es la función para el cambio de tamaño de laventana
     // glutReshapeFunc(reshape);
 // Comienza el bucle de dibujo y proceso de eventos.
