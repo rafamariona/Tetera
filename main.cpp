@@ -6,7 +6,9 @@
 double rotate_y=0;
 double rotate_x=0;
 double rotate_z=0;
-
+GLfloat X = 0.0f;
+GLfloat Y = 0.0f;
+GLfloat Z = 0.0f;
 
 GLfloat scale = 1.0f;
 void init(void)
@@ -24,7 +26,7 @@ void display(void)
     /* color */
     glColor3f(0.855, 0.647, 0.125);
     glLoadIdentity();
-    glTranslatef(0.0, 0.0, 0.0);
+    glTranslatef(X,Y,Z);
     glRotatef( rotate_x, 1.0, 0.0, 0.0 );
     glRotatef( rotate_y, 0.0, 1.0, 0.0 );
     glRotatef( rotate_z, 0.0, 0.0, 1.0 );
@@ -48,36 +50,31 @@ void keyboard(unsigned char key, int x, int y)
     //control de teclas que hacen referencia a Escalar y transladar el cubo en los ejes X,Y,Z.
     switch (key)
     {
-    case '+':
+    case 'Z':
         scale+=0.05;
         break;
-    case '-':
+    case 'z':
         scale-=0.05;
         break;
     case 'x' :
-        rotate_x += 1;
+        X -= 0.05f;
         break;
     case 'X' :
-        rotate_x -= 1;
+        X += 0.05f;
         break;
     case 'y' :
-        rotate_y += 1;
+        Y -= 0.05f;
         break;
     case 'Y' :
-        rotate_y -= 1;
-        break;
-    case 'z':
-        rotate_z -= 1;
-        break;
-    case 'Z':
-        rotate_z += 1;
+        Y += 0.05f;
         break;
     case 'r':
-			rotate_x=0.0;
-			rotate_y=0.0;
-			rotate_z=0.0;
-			scale=1.0;
-			break;
+        X=0.0,Y=0.0;
+        rotate_x=0.0;
+        rotate_y=0.0;
+        rotate_z=0.0;
+        scale=1.0;
+        break;
     case 27:
         exit(0);			// exit
     }
