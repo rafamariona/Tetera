@@ -72,10 +72,7 @@ void display(void)
     glRotatef( rotate_z, 0.0, 0.0, 1.0 );
     glScalef(scale, scale, scale);
     
-
-    glutWireSphere (250,50,50); 
- 
-    
+glutSolidCone(130, 160,50,50);
  glFlush();
 
 }
