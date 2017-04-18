@@ -1,7 +1,6 @@
-//Tetera que se mueve por MT14002
-
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <stdlib.h>
 
 double rotate_y=0;
 double rotate_x=0;
@@ -11,41 +10,76 @@ GLfloat Y = 0.0f;
 GLfloat Z = 0.0f;
 
 GLfloat scale = 1.0f;
+
+
 void init(void)
 {
-    /* selecciona el color de borrado */
-    glClearColor (0.0, 0.0, 0.0, 0.0);
-    glShadeModel (GL_FLAT);
+    GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+    // Activamos la fuente de luz
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0); //Activamos las luces en 0
+    glDepthFunc(GL_LESS); //comparación de profundidad
+    glEnable(GL_DEPTH_TEST); //activa GL_DEPTH_TEST
+    
+    glLightfv(GL_LIGHT0,GL_POSITION,light_position);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+}
+
+void reshape(int w, int h)
+{
+ glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+// Activamos la matriz de proyeccion.
+ glMatrixMode(GL_PROJECTION);
+// "limpiamos" esta con la matriz identidad.
+ glLoadIdentity();
+// Usamos proyeccion ortogonal
+ glOrtho(-300, 300, -300, 300, -300, 300);
+// Activamos la matriz de modelado/visionado.
+ glMatrixMode(GL_MODELVIEW);
+// "Limpiamos" la matriz
+ glLoadIdentity();
 }
 void display(void)
 {
-    /* borra la pantalla */
-    glClear (GL_COLOR_BUFFER_BIT);
-    /* seleccionamos la matriz modelo/vista */
-    glMatrixMode(GL_MODELVIEW);
-    /* color */
-    glColor3f(0.0, 0.0, 1.0);
-    glLoadIdentity();
-    glTranslatef(X,Y,Z);
+// Propiedades del material
+ /*GLfloat mat_ambient[] = { 0.19225,0.19225,0.19225};
+ GLfloat mat_diffuse[] = { 0.50754,0.50754,0.50754};
+ GLfloat mat_specular[] = { 0.508273,0.508273,0.508273};*/
+ GLfloat mat_ambient[] = { 0.1745f, 0.01175f, 0.01175f,1.0f };
+    GLfloat mat_diffuse[] = { 0.61424f, 0.04136f, 0.04136f, 1.0f };
+    GLfloat mat_specular[] = { 0.727811f, 0.626959f, 0.626959f, 1.0f };
+    GLfloat shine[] = {25.6f};
+// "Limpiamos" el frame buffer con el color de "Clear", en este
+// caso negro.
+ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ glMatrixMode( GL_MODELVIEW_MATRIX );
+ glLoadIdentity();
+// Rotacion de 25 grados en torno al eje x
+ //glRotated(25.0, 1.0, 0.0, 0.0);
+// Rotacion de -30 grados en torno al eje y
+ //glRotated(-30.0, 0.0, 1.0, 0.0);
+// Dibujamos una "Tetera" y le aplico el material
+ glPushMatrix();
+//setMaterial
+ glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+ glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+ glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+ glMaterialfv(GL_FRONT, GL_SHININESS, shine);
+  glTranslatef(X,Y,Z);
     glRotatef( rotate_x, 1.0, 0.0, 0.0 );
     glRotatef( rotate_y, 0.0, 1.0, 0.0 );
     glRotatef( rotate_z, 0.0, 0.0, 1.0 );
     glScalef(scale, scale, scale);
+    
 
-    /* transformación modelo/vista */
-    //acá la terera se visualiza en el 0,0,0
-    gluLookAt(0.0,0.0,0.0001, //punto de vista en el eje X,Y,Z
-              0.0,-1.0,0.0, //Centro del Objeto en el eje X,Y,Z (vista de planta)
-              0.0,1.0,0.0); //Orientación de la cámara (vector UP el eje X,Y,Z)
+    glutWireSphere (250,50,50); 
+ 
+    
+ glFlush();
 
-    /* Dibujamos una tetera */
-    glutWireTeapot(0.5);
-
-    /* Vacia el buffer de dibujo */
-    glFlush ();
 }
 
-// Función para controlar teclas normales del teclado.
 void keyboard(unsigned char key, int x, int y)
 {
     //control de teclas que hacen referencia a Escalar y trasladar la tetera en los ejes X,Y,
@@ -58,16 +92,16 @@ void keyboard(unsigned char key, int x, int y)
         scale-=0.05;
         break;
     case 'x' :
-        X -= 0.05f;
+        X -= 5.0f;
         break;
     case 'X' :
-        X += 0.05f;
+        X += 5.0f;
         break;
     case 'y' :
-        Y -= 0.05f;
+        Y -= 5.0f;
         break;
     case 'Y' :
-        Y += 0.05f;
+        Y += 5.0f;
         break;
     case 'r': //resetea las posiciones de todo y el tamaño
         X=0.0,Y=0.0;
@@ -105,55 +139,29 @@ void specialKeys( int key, int x, int y )
 
 }
 
-void reshape(int w, int h)
+
+
+int main(int argc, char **argv)
 {
-    glViewport(0, 0,  (GLsizei) w, (GLsizei) h);
-// Activamos la matriz de proyeccion.
-    glMatrixMode(GL_PROJECTION);
-// "limpiamos" esta con la matriz identidad.
-    glLoadIdentity();
-// Usamos proyeccion ortogonal
-    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
-// Activamos la matriz de modelado/visionado.
-    glMatrixMode(GL_MODELVIEW);
-// "Limpiamos" la matriz
-    glLoadIdentity();
-}
-
-
-int main(int argc, char** argv)
-{
-// Inicializa la librería auxiliar GLUT
-    glutInit(&argc, argv);
-// Inicializa el modo de visualización
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-// Indica el tamaño de la ventana (ancho,alto)
-    glutInitWindowSize(800, 600);
-// Indica la posición inicial (xmin,ymin)
-    glutInitWindowPosition(100, 100);
-// Abre la ventana con el título indicado
-    glutCreateWindow("Dibujando una tetera 3d");
-
-// Inicializar valores
+// Inicializo OpenGL
+ glutInit(&argc, argv);
+// Activamos buffer simple y colores del tipo RGB
+ glutInitDisplayMode (GLUT_RGB | GLUT_DEPTH);
+// Definimos una ventana de medidas 800 x 600 como ventana
+// de visualizacion en pixels
+ glutInitWindowSize (800, 600);
+// Posicionamos la ventana en la esquina superior izquierda de
+// la pantalla.
+ glutInitWindowPosition (0, 0);
+// Creamos literalmente la ventana y le adjudicamos el nombre que se
+// observara en su barra de titulo.
+ glutCreateWindow ("Tetera con materiales");
+// Inicializamos el sistema
     init();
-// Indica cual es la función de dibujo
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(specialKeys);
-// Indica cual es la función para el cambio de tamaño de laventana
     glutReshapeFunc(reshape);
-// Ubicamos la fuente de luz en el punto
-    GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
-// Activamos la fuente de luz
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_NORMALIZE);
-
-
-// Comienza el bucle de dibujo y proceso de eventos.
-
-
     glutMainLoop();
-
+ return 0;
 }
